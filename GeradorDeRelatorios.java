@@ -21,6 +21,7 @@ public class GeradorDeRelatorios {
     public static final String FILTRO_TODOS = "todos";
     public static final String FILTRO_ESTOQUE_MENOR_OU_IGUAL_A = "estoque_menor_igual";
     public static final String FILTRO_CATEGORIA_IGUAL_A = "categoria_igual";
+    public static final String FILTRO_PRECO_INTERVALO = "preco_intervalo";
 
     public static final int FORMATO_PADRAO = 0b0000;
     public static final int FORMATO_NEGRITO = 0b0001;
@@ -31,6 +32,7 @@ public class GeradorDeRelatorios {
     private String criterio;
     private String filtro;
     private String argFiltro;
+    private String argFiltro2; // Novo parâmetro para o critério de filtro de preço
     private int formatFlags;
 
     public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro,
@@ -41,6 +43,12 @@ public class GeradorDeRelatorios {
         this.filtro = filtro;
         this.argFiltro = argFiltro;
         this.formatFlags = formatFlags;
+    }
+
+    public GeradorDeRelatorios(List<Produto> produtos, String algoritmo, String criterio, String filtro,
+            String argFiltro, String argFiltro2, int formatFlags) {
+        this(produtos, algoritmo, criterio, filtro, argFiltro, formatFlags);
+        this.argFiltro2 = argFiltro2;
     }
 
     private int particiona(int ini, int fim, Comparator<Produto> comparator) {
@@ -85,7 +93,7 @@ public class GeradorDeRelatorios {
                 ordena(q + 1, fim, comparator);
             }
         } else {
-            throw new RuntimeException("Algoritmo invalido!");
+            throw new RuntimeException("Algoritmo inválido!");
         }
     }
 
@@ -112,7 +120,7 @@ public class GeradorDeRelatorios {
         } else if (criterio.equals(CRIT_ESTOQUE_DECRESC)) {
             comparator = Comparator.comparing(Produto::getQtdEstoque).reversed();
         } else {
-            throw new RuntimeException("Criterio invalido!");
+            throw new RuntimeException("Criterio inválido!");
         }
 
         ordena(0, produtos.size() - 1, comparator);
@@ -140,8 +148,16 @@ public class GeradorDeRelatorios {
                 if (p.getCategoria().equalsIgnoreCase(argFiltro)) {
                     selecionado = true;
                 }
+            } else if (filtro.equals(FILTRO_PRECO_INTERVALO)) {
+                double preco = p.getPreco();
+                double precoMin = Double.parseDouble(argFiltro);
+                double precoMax = Double.parseDouble(argFiltro2);
+
+                if (preco >= precoMin && preco <= precoMax) {
+                    selecionado = true;
+                }
             } else {
-                throw new RuntimeException("Filtro invalido!");
+                throw new RuntimeException("Filtro inválido!");
             }
 
             if (selecionado) {
@@ -222,12 +238,13 @@ public class GeradorDeRelatorios {
         if (args.length < 4) {
             System.out.println("Uso:");
             System.out.println("\tjava " + GeradorDeRelatorios.class.getName()
-                    + " <algoritmo> <critério de ordenação> <critério de filtragem> <parâmetro de filtragem> <opções de formatação>");
+                    + " <algoritmo> <critério de ordenação> <critério de filtragem> <parâmetro de filtragem> [parâmetro 2 de filtragem] <opções de formatação>");
             System.out.println("Onde:");
             System.out.println("\talgoritmo: 'quick' ou 'insertion'");
             System.out.println("\tcritério de ordenação: 'preco_c' ou 'preco_d' ou 'descricao_c' ou 'descricao_d' ou 'estoque_c' ou 'estoque_d'");
-            System.out.println("\tcritério de filtragem: 'todos' ou 'estoque_menor_igual' ou 'categoria_igual'");
+            System.out.println("\tcritério de filtragem: 'todos' ou 'estoque_menor_igual' ou 'categoria_igual' ou 'preco_intervalo'");
             System.out.println("\tparâmetro de filtragem: argumentos adicionais necessários para a filtragem");
+            System.out.println("\tparâmetro 2 de filtragem (somente para critério de filtragem 'preco_intervalo') ");
             System.out.println("\topções de formatação: 'negrito' e/ou 'italico'");
             System.out.println();
             System.exit(1);
@@ -237,10 +254,11 @@ public class GeradorDeRelatorios {
         String opcao_criterio_ord = args[1];
         String opcao_criterio_filtro = args[2];
         String opcao_parametro_filtro = args[3];
+        String opcao_parametro_filtro2 = args.length > 4 ? args[4] : null;
 
         String[] opcoes_formatacao = new String[2];
-        opcoes_formatacao[0] = args.length > 4 ? args[4] : null;
-        opcoes_formatacao[1] = args.length > 5 ? args[5] : null;
+        opcoes_formatacao[0] = args.length > 5 ? args[5] : null;
+        opcoes_formatacao[1] = args.length > 6 ? args[6] : null;
         int formato = FORMATO_PADRAO;
 
         for (String op : opcoes_formatacao) {
@@ -248,8 +266,15 @@ public class GeradorDeRelatorios {
             formato |= (op != null && op.equals("italico")) ? FORMATO_ITALICO : 0;
         }
 
-        GeradorDeRelatorios gdr = new GeradorDeRelatorios(carregaProdutos(), opcao_algoritmo, opcao_criterio_ord,
-                opcao_criterio_filtro, opcao_parametro_filtro, formato);
+        GeradorDeRelatorios gdr;
+
+        if (opcao_criterio_filtro.equals(FILTRO_PRECO_INTERVALO)) {
+            gdr = new GeradorDeRelatorios(carregaProdutos(), opcao_algoritmo, opcao_criterio_ord,
+                    opcao_criterio_filtro, opcao_parametro_filtro, opcao_parametro_filtro2, formato);
+        } else {
+            gdr = new GeradorDeRelatorios(carregaProdutos(), opcao_algoritmo, opcao_criterio_ord,
+                    opcao_criterio_filtro, opcao_parametro_filtro, formato);
+        }
 
         try {
             gdr.geraRelatorio("saida.html");

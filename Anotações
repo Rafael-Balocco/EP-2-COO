@@ -1,0 +1,29 @@
+Listar todos os produtos em ordem crescente de preço:
+java GeradorDeRelatorios quick preco_c todos 0 0
+
+Listar todos os produtos em ordem decrescente de preço:
+java GeradorDeRelatorios quick preco_d todos 0 0
+
+Listar todos os produtos em ordem crescente de descrição:
+java GeradorDeRelatorios quick descricao_c todos 0 0
+
+Listar todos os produtos em ordem decrescente de descrição:
+java GeradorDeRelatorios quick descricao_d todos 0 0
+
+Listar todos os produtos em ordem crescente de estoque:
+java GeradorDeRelatorios quick estoque_c todos 0 0
+
+Listar todos os produtos em ordem decrescente de estoque:
+java GeradorDeRelatorios quick estoque_d todos 0 0
+
+Listar produtos com estoque menor ou igual a 5, em ordem crescente de preço:
+java GeradorDeRelatorios quick preco_c estoque_menor_igual 5 0
+
+Listar produtos da categoria "Livros", em ordem crescente de estoque, em itálico:
+java GeradorDeRelatorios quick estoque_c categoria_igual Livros italico
+
+Listar produtos com preço entre R$ 100 e R$ 500, em ordem decrescente de preço, em negrito e itálico:
+java GeradorDeRelatorios quick preco_d preco_intervalo 100 500 negrito italico
+
+Listar produtos com preço entre R$ 50 e R$ 150, em ordem crescente de descrição, em negrito:
+java GeradorDeRelatorios quick descricao_c preco_intervalo 50 150 negrito
