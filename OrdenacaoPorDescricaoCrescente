@@ -1,0 +1,7 @@
+public class OrdenacaoPorDescricaoCrescente implements CriterioOrdenacaoStrategy {
+ 
+    @Override
+    public Comparator<Produto> getComparator() {
+        return Comparator.comparing(Produto::getDescricao);
+    }
+}
