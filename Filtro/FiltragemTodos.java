@@ -1,4 +1,7 @@
+package Filtro;
 import java.util.*;
+
+import Produto.Produto;
 
 public class FiltragemTodos implements FiltragemStrategy {
     @Override

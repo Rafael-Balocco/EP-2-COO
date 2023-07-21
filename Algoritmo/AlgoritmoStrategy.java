@@ -1,6 +1,10 @@
+package Algoritmo;
+
 import java.util.*;
 
-public interface OrdenacaoStrategy {
+import Produto.Produto;
+
+public interface AlgoritmoStrategy {
     void ordena(List<Produto> produtos, Comparator<Produto> comparator);
 }
 

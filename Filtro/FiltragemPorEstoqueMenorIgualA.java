@@ -1,6 +1,9 @@
+package Filtro;
 import java.util.*;
 
-public class FiltragemPorEstoque implements FiltragemStrategy {
+import Produto.Produto;
+
+public class FiltragemPorEstoqueMenorIgualA implements FiltragemStrategy {
     @Override
     public List<Produto> filtra(List<Produto> produtos, String argFiltro) {
         int limiteEstoque = Integer.parseInt(argFiltro);

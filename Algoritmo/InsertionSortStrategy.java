@@ -1,6 +1,10 @@
+package Algoritmo;
+
 import java.util.*;
 
-public class InsertionSortStrategy implements OrdenacaoStrategy {
+import Produto.Produto;
+
+public class InsertionSortStrategy implements AlgoritmoStrategy {
     
     @Override
     public void ordena(List<Produto> produtos, Comparator<Produto> comparator) {

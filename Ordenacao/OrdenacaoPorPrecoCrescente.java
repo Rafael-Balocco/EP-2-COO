@@ -1,4 +1,7 @@
+package Ordenacao;
 import java.util.*;
+
+import Produto.Produto;
 public class OrdenacaoPorPrecoCrescente implements CriterioOrdenacaoStrategy {
     
     @Override

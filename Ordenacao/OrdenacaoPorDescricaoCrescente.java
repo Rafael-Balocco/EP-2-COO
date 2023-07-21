@@ -1,3 +1,9 @@
+package Ordenacao;
+
+import java.util.Comparator;
+
+import Produto.Produto;
+
 public class OrdenacaoPorDescricaoCrescente implements CriterioOrdenacaoStrategy {
  
     @Override

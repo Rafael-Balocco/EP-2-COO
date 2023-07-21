@@ -1,6 +1,10 @@
+package Algoritmo;
+
 import java.util.*;
 
-public class QuickSortStrategy implements OrdenacaoStrategy {
+import Produto.Produto;
+
+public class QuickSortStrategy implements AlgoritmoStrategy {
     @Override
     public void ordena(List<Produto> produtos, Comparator<Produto> comparator) {
         ordenaRecursivo(produtos, 0, produtos.size() - 1, comparator);
